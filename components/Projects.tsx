@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ExternalLink, Github, Filter, X } from 'lucide-react';
 import Image from 'next/image';
-import { projects, featuredProjects, type Project } from '@/lib/projects';
+import { projects, featuredProjects, type Project } from '../lib/projects';
 
 const Projects = () => {
   const [filter, setFilter] = useState<'all' | 'featured'>('all');

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, Mail, Menu, X } from 'lucide-react';
-import { CONFIG } from '@/lib/seo';
+import { CONFIG } from '../lib/seo';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
