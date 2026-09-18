@@ -40,9 +40,9 @@ const Hero3D = ({ onScrollToProjects }: Hero3DProps) => {
     checkWebGLSupport();
   }, []);
 
-  const handleCanvasError = (error: Error) => {
+  const handleCanvasError = (error: unknown) => {
     console.error('Canvas error:', error);
-    setCanvasError(error);
+    setCanvasError(error instanceof Error ? error : new Error(String(error)));
   };
 
   const retryCanvas = () => {
