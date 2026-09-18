@@ -54,6 +54,7 @@ const projects = [
     description: 'بهینه‌سازی معماری شبکه‌های Physics-Informed Neural Networks با جست‌وجوی خودکار معماری و ارزیابی مدل‌ها بر اساس خطا.',
     stack: 'Python · PyTorch · Optuna · PINNs',
     featured: true,
+    href: 'https://github.com/ParsaR082/PINN-NAS',
   },
   {
     number: '۰۲',
@@ -61,14 +62,15 @@ const projects = [
     category: 'فول‌استک / پروژه واقعی',
     description: 'سامانه مدیریت مدرسه با رابط فارسی و راست‌به‌چپ، داشبورد و مدیریت داده‌ها.',
     stack: 'Next.js · TypeScript · Supabase · PostgreSQL',
-    placeholder: true,
+    href: 'https://www.kawsarschool.cfd/',
   },
   {
     number: '۰۳',
-    title: 'Task Manager',
+    title: 'NeoPlan',
     category: 'فول‌استک / وب',
     description: 'سامانه مدیریت وظایف با احراز هویت Google، API و مدیریت داده‌ها روی زیرساخت ابری.',
     stack: 'Next.js · TypeScript · Prisma · MongoDB',
+    href: 'https://neoplan-kappa.vercel.app/',
   },
   {
     number: '۰۴',
@@ -76,6 +78,7 @@ const projects = [
     category: 'وب / پورتفولیو',
     description: 'وب‌سایت شخصی و تیمی با طراحی مینیمال، وبلاگ و تمرکز بر تجربه کاربری.',
     stack: 'Next.js · TypeScript · Tailwind CSS',
+    href: 'https://neo-void.vercel.app/',
   },
 ];
 
@@ -225,10 +228,15 @@ export default function HomePage() {
             <div className="projects-title"><h2>چند نمونه از <em>کارها.</em></h2><span>منتخب پروژه‌ها</span></div>
             <div className="project-grid">
               {projects.map((project, index) => (
-                <Reveal key={project.title} delay={index * .05} className={project.featured ? 'project-card featured' : 'project-card'}>
-                  <div className="project-top"><span>{project.number}</span><span>{project.category}</span></div>
-                  <div className="project-body"><h3>{project.title}</h3><p>{project.description}</p></div>
-                  <div className="project-bottom"><span>{project.stack}</span>{project.placeholder ? <small>در حال تکمیل</small> : <ArrowUpLeft size={18} />}</div>
+                <Reveal key={project.title} delay={index * .05} className="project-reveal">
+                  <a className={project.featured ? 'project-card featured' : 'project-card'} href={project.href} target="_blank" rel="noreferrer" aria-label={`مشاهده پروژه ${project.title}`}>
+                    <span className="project-glow" />
+                    <span className="project-scanline" />
+                    <div className="project-top"><span>{project.number}</span><span>{project.category}</span></div>
+                    <div className="project-body"><h3>{project.title}</h3><p>{project.description}</p></div>
+                    <div className="project-hover-meta"><span>مشاهده پروژه</span><span className="project-hover-arrow"><ArrowUpLeft size={18} /></span></div>
+                    <div className="project-bottom"><span>{project.stack}</span><span className="project-link-icon"><ArrowUpLeft size={18} /></span></div>
+                  </a>
                 </Reveal>
               ))}
             </div>
