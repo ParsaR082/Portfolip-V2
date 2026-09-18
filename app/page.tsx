@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowUpLeft,
@@ -48,70 +48,44 @@ const projects = [
   {
     number: '۰۱',
     title: 'PINN-NAS',
-    category: 'هوش مصنوعی و یادگیری عمیق',
-    description:
-      'پروژه کارشناسی برای بهینه‌سازی معماری شبکه‌های Physics-Informed Neural Networks با جست‌وجوی خودکار معماری و ارزیابی معماری‌های مختلف بر اساس خطای مدل.',
+    category: 'هوش مصنوعی / پایان‌نامه',
+    description: 'بهینه‌سازی معماری شبکه‌های Physics-Informed Neural Networks با جست‌وجوی خودکار معماری و ارزیابی مدل‌ها بر اساس خطا.',
     stack: 'Python · PyTorch · Optuna · PINNs',
     featured: true,
   },
   {
     number: '۰۲',
     title: 'سامانه مدیریت مدرسه',
-    category: 'پروژه واقعی · فول‌استک',
-    description:
-      'سامانه مدیریت مدرسه با داشبورد فارسی و راست‌به‌چپ، مدیریت اطلاعات و ارتباط با پایگاه داده. لینک و تصاویر پروژه در نسخه نهایی اضافه می‌شوند.',
+    category: 'فول‌استک / پروژه واقعی',
+    description: 'سامانه مدیریت مدرسه با رابط فارسی و راست‌به‌چپ، داشبورد و مدیریت داده‌ها.',
     stack: 'Next.js · TypeScript · Supabase · PostgreSQL',
     placeholder: true,
   },
   {
     number: '۰۳',
     title: 'Task Manager',
-    category: 'وب · فول‌استک',
-    description:
-      'سامانه مدیریت وظایف با احراز هویت Google، مدیریت داده‌ها و API و استقرار روی بستر ابری.',
+    category: 'فول‌استک / وب',
+    description: 'سامانه مدیریت وظایف با احراز هویت Google، API و مدیریت داده‌ها روی زیرساخت ابری.',
     stack: 'Next.js · TypeScript · Prisma · MongoDB',
   },
   {
     number: '۰۴',
     title: 'NeoVoid',
-    category: 'نمونه‌کار شخصی',
-    description:
-      'وب‌سایت شخصی و تیمی با طراحی مینیمال، بخش وبلاگ و تمرکز بر تجربه کاربری و ارائه پروژه‌ها.',
+    category: 'وب / پورتفولیو',
+    description: 'وب‌سایت شخصی و تیمی با طراحی مینیمال، وبلاگ و تمرکز بر تجربه کاربری.',
     stack: 'Next.js · TypeScript · Tailwind CSS',
-  },
-];
-
-const experience = [
-  {
-    period: '۱۴۰۲ — ۱۴۰۵',
-    title: 'توسعه‌دهنده نرم‌افزار و فول‌استک',
-    company: 'فریلنسر',
-    points: [
-      'توسعه و تحویل ۳ پروژه واقعی شامل دو سامانه فروشگاهی و یک سامانه مدیریت مدرسه.',
-      'پیاده‌سازی پروژه‌های فول‌استک از رابط کاربری و API تا پایگاه داده و استقرار.',
-      'توسعه، نگهداری و بهبود قابلیت‌های پروژه‌های موجود بر اساس نیاز مشتری.',
-      'عیب‌یابی و رفع مشکلات فنی و شخصی‌سازی قابلیت‌ها متناسب با نیاز هر پروژه.',
-    ],
   },
 ];
 
 const groups = ['همه', 'برنامه‌نویسی', 'توسعه وب', 'هوش مصنوعی', 'پایگاه داده', 'ابزارها'];
 
-function Reveal({
-  children,
-  delay = 0,
-  className = '',
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
+function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -122,30 +96,9 @@ function Reveal({
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState('همه');
-  const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const filteredSkills =
-    activeGroup === 'همه'
-      ? skills
-      : skills.filter((skill) => skill.group === activeGroup);
-
-  const navItems = [
-    ['درباره من', 'about'],
-    ['تجربه', 'experience'],
-    ['مهارت‌ها', 'skills'],
-    ['پروژه‌ها', 'projects'],
-    ['تحصیلات', 'education'],
-  ];
+  const filteredSkills = activeGroup === 'همه' ? skills : skills.filter((skill) => skill.group === activeGroup);
+  const navItems = [['درباره من', 'about'], ['تجربه', 'experience'], ['مهارت‌ها', 'skills'], ['پروژه‌ها', 'projects'], ['تحصیلات', 'education']];
 
   const scrollTo = (id: string) => {
     setMenuOpen(false);
@@ -153,356 +106,156 @@ export default function HomePage() {
   };
 
   return (
-    <div dir="rtl" className="site-shell">
-      <div className="scroll-progress" style={{ width: `${progress}%` }} />
-
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
-      <div className="ambient ambient-three" />
-
+    <div className="site-shell" dir="rtl">
+      <div className="grain" />
       <header className="topbar">
         <div className="nav-wrap">
-          <button className="brand" onClick={() => scrollTo('hero')} aria-label="بازگشت به ابتدای صفحه">
-            <span className="brand-mark"><span /></span>
+          <button className="brand" onClick={() => scrollTo('hero')} aria-label="ابتدای صفحه">
+            <span className="brand-mark">پ</span>
             <span>پارسا رحمانی</span>
           </button>
-
           <nav className="desktop-nav">
-            {navItems.map(([label, id]) => (
-              <button key={id} onClick={() => scrollTo(id)}>{label}</button>
-            ))}
+            {navItems.map(([label, id]) => <button key={id} onClick={() => scrollTo(id)}>{label}</button>)}
           </nav>
-
           <div className="nav-actions">
-            <a
-              href="https://github.com/ParsaR082"
-              target="_blank"
-              rel="noreferrer"
-              className="icon-button"
-              aria-label="گیت‌هاب"
-            >
-              <Github size={18} />
-            </a>
-            <button className="nav-cta" onClick={() => scrollTo('contact')}>
-              ارتباط
-              <ArrowLeft size={16} />
-            </button>
-            <button
-              className="mobile-menu"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="منو"
-            >
-              {menuOpen ? <X size={21} /> : <Menu size={21} />}
-            </button>
+            <a className="nav-github" href="https://github.com/ParsaR082" target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={17} /></a>
+            <button className="nav-contact" onClick={() => scrollTo('contact')}>ارتباط <ArrowLeft size={15} /></button>
+            <button className="mobile-menu" onClick={() => setMenuOpen((v) => !v)} aria-label="منو">{menuOpen ? <X size={20} /> : <Menu size={20} />}</button>
           </div>
         </div>
-
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              className="mobile-nav"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              {navItems.map(([label, id]) => (
-                <button key={id} onClick={() => scrollTo(id)}>{label}</button>
-              ))}
-              <button onClick={() => scrollTo('contact')}>ارتباط</button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {menuOpen && (
+          <div className="mobile-nav">
+            {navItems.map(([label, id]) => <button key={id} onClick={() => scrollTo(id)}>{label}</button>)}
+            <button onClick={() => scrollTo('contact')}>ارتباط</button>
+          </div>
+        )}
       </header>
 
       <main>
-        <section id="hero" className="hero section">
-          <div className="hero-grid" />
-          <div className="hero-content">
-            <motion.div
-              className="eyebrow"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="eyebrow-dot" />
-              مهندس نرم‌افزار · هوش مصنوعی
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 35 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
-              ایده‌ها را به
-              <span className="gradient-word"> تجربه‌های دیجیتال </span>
-              تبدیل می‌کنم.
-            </motion.h1>
-
-            <motion.p
-              className="hero-copy"
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25 }}
-            >
-              توسعه‌دهنده نرم‌افزار با تمرکز بر ساخت محصولات فول‌استک و تجربه عملی
-              در هوش مصنوعی و یادگیری عمیق؛ از معماری و کدنویسی تا حل مسئله و
-              استقرار نهایی.
-            </motion.p>
-
-            <motion.div
-              className="hero-actions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <button className="primary-button" onClick={() => scrollTo('projects')}>
-                مشاهده پروژه‌ها
-                <ArrowLeft size={17} />
-              </button>
-              <a
-                href="https://github.com/ParsaR082"
-                target="_blank"
-                rel="noreferrer"
-                className="secondary-button"
-              >
-                <Github size={17} />
-                GitHub
-              </a>
-            </motion.div>
-
-            <motion.div
-              className="hero-meta"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-            >
-              <span><Check size={15} /> فارغ‌التحصیل مهندسی کامپیوتر</span>
-              <span><Check size={15} /> ۳ سال تجربه فریلنسری</span>
-              <span><Check size={15} /> انگلیسی متوسط رو به بالا</span>
-            </motion.div>
+        <section id="hero" className="hero">
+          <div className="hero-bg">
+            <span className="hero-orb hero-orb-one" />
+            <span className="hero-orb hero-orb-two" />
           </div>
-
-          <motion.div
-            className="hero-art"
-            initial={{ opacity: 0, scale: 0.88, rotate: 4 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="orbit orbit-a" />
-            <div className="orbit orbit-b" />
-            <div className="orbit orbit-c" />
-            <motion.div
-              className="code-card"
-              animate={{ y: [0, -10, 0], rotate: [0, 0.6, 0] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className="code-top">
-                <span /><span /><span />
-                <small>portfolio.tsx</small>
+          <div className="container hero-inner">
+            <div className="hero-copy">
+              <Reveal className="hero-kicker"><span /> مهندس نرم‌افزار · هوش مصنوعی</Reveal>
+              <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }}>
+                نرم‌افزار می‌سازم؛<br /><em>مسئله حل می‌کنم.</em>
+              </motion.h1>
+              <motion.p className="hero-description" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .25, duration: .7 }}>
+                توسعه‌دهنده نرم‌افزار با تمرکز بر محصولات فول‌استک و تجربه عملی در هوش مصنوعی و یادگیری عمیق؛ از ایده و معماری تا پیاده‌سازی و استقرار.
+              </motion.p>
+              <div className="hero-actions">
+                <button className="button button-dark" onClick={() => scrollTo('projects')}>پروژه‌ها <ArrowLeft size={16} /></button>
+                <a className="button button-ghost" href="https://github.com/ParsaR082" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a>
               </div>
-              <div className="code-body" dir="ltr">
-                <span className="line muted">01</span><span className="pink">const</span> <span className="blue">developer</span> = {'{'}<br />
-                <span className="line muted">02</span>&nbsp;&nbsp;name: <span className="green">&quot;Parsa&quot;</span>,<br />
-                <span className="line muted">03</span>&nbsp;&nbsp;focus: [<span className="green">&quot;AI&quot;</span>, <span className="green">&quot;Full-Stack&quot;</span>],<br />
-                <span className="line muted">04</span>&nbsp;&nbsp;build: <span className="yellow">true</span>,<br />
-                <span className="line muted">05</span>&nbsp;&nbsp;curiosity: <span className="yellow">∞</span><br />
-                <span className="line muted">06</span>{'}'}
+              <div className="hero-facts">
+                <span><Check size={14} /> کارشناسی مهندسی کامپیوتر</span>
+                <span><Check size={14} /> ۳ سال تجربه فریلنسری</span>
               </div>
-              <div className="code-glow" />
-            </motion.div>
-            <div className="floating-chip chip-one"><Code2 size={15} /> فول‌استک</div>
-            <div className="floating-chip chip-two"><Sparkles size={15} /> هوش مصنوعی</div>
-            <div className="floating-chip chip-three"><Zap size={15} /> حل مسئله</div>
-          </motion.div>
-
-          <button className="scroll-cue" onClick={() => scrollTo('about')} aria-label="ادامه">
-            <span>ادامه</span>
-            <ChevronDown size={17} />
-          </button>
+            </div>
+            <div className="hero-visual">
+              <div className="visual-frame">
+                <div className="visual-top"><span>۰۱</span><span>PARSA / SOFTWARE</span></div>
+                <div className="visual-center">
+                  <div className="monogram">پ<span>.</span></div>
+                  <div className="visual-caption">ساختن، آزمودن، بهتر کردن.</div>
+                </div>
+                <div className="visual-bottom"><span>AI × WEB</span><span>۱۴۰۵</span></div>
+              </div>
+              <div className="visual-tag tag-a"><Code2 size={14} /> فول‌استک</div>
+              <div className="visual-tag tag-b"><Sparkles size={14} /> هوش مصنوعی</div>
+            </div>
+          </div>
+          <button className="hero-scroll" onClick={() => scrollTo('about')} aria-label="ادامه"><span>اسکرول کنید</span><ChevronDown size={16} /></button>
         </section>
 
-        <section id="about" className="section section-dark">
+        <section id="about" className="section about-section">
           <div className="container">
-            <Reveal className="section-heading">
-              <span className="section-kicker">۰۱ / درباره من</span>
-              <h2>مهندسی با ذهنیت <em>حل مسئله.</em></h2>
-            </Reveal>
-
+            <Reveal className="section-label">۰۱ — درباره من</Reveal>
             <div className="about-grid">
-              <Reveal className="about-main">
-                <p className="large-text">
-                  مسیر من از توسعه نرم‌افزار شروع شده و به ترکیب آن با هوش مصنوعی
-                  رسیده است. در پروژه‌های واقعی، از طراحی رابط کاربری و منطق سمت
-                  سرور تا پایگاه داده و استقرار، روی محصول به‌صورت یکپارچه کار
-                  می‌کنم.
-                </p>
-                <p>
-                  تجربه فریلنسری به من یاد داده است که هر پروژه فقط کدنویسی نیست؛
-                  درک مسئله، پیدا کردن راه‌حل، سازگار شدن با نیازهای جدید و
-                  پشتکار در برابر خطاها بخش جدایی‌ناپذیر توسعه یک محصول خوب است.
-                </p>
+              <Reveal><h2>ترکیب <em>مهندسی</em> و کنجکاوی.</h2></Reveal>
+              <Reveal delay={.08} className="about-text">
+                <p>مسیر من از توسعه نرم‌افزار شروع شده و به ترکیب آن با هوش مصنوعی رسیده است. در پروژه‌های واقعی، از رابط کاربری و منطق سمت سرور تا پایگاه داده و استقرار، روی محصول به‌صورت یکپارچه کار می‌کنم.</p>
+                <p>فریلنسری به من یاد داده است که توسعه خوب فقط نوشتن کد نیست؛ درک مسئله، پیدا کردن راه‌حل و پشتکار در برابر خطاها بخش مهمی از ساختن یک محصول خوب است.</p>
               </Reveal>
-
-              <Reveal delay={0.1} className="about-side">
-                <div className="stat-card">
-                  <strong>۰۳+</strong>
-                  <span>سال تجربه فریلنسری</span>
-                </div>
-                <div className="stat-card">
-                  <strong>۰۳</strong>
-                  <span>پروژه واقعی تحویل‌شده</span>
-                </div>
-                <div className="stat-card">
-                  <strong>∞</strong>
-                  <span>یادگیری و ساختن</span>
-                </div>
-              </Reveal>
+            </div>
+            <div className="stats">
+              <div><strong>۰۳+</strong><span>سال تجربه فریلنسری</span></div>
+              <div><strong>۰۳</strong><span>پروژه واقعی تحویل‌شده</span></div>
+              <div><strong>∞</strong><span>یادگیری مداوم</span></div>
             </div>
           </div>
         </section>
 
-        <section id="experience" className="section">
+        <section id="experience" className="section experience-section">
           <div className="container">
-            <Reveal className="section-heading">
-              <span className="section-kicker">۰۲ / تجربه</span>
-              <h2>چیزهایی که در <em>دنیای واقعی</em> ساخته‌ام.</h2>
-            </Reveal>
-
-            <div className="timeline">
-              {experience.map((item) => (
-                <Reveal key={item.period} className="timeline-item">
-                  <div className="timeline-period">{item.period}</div>
-                  <div className="timeline-dot" />
-                  <div className="timeline-content">
-                    <div className="experience-icon"><Briefcase size={19} /></div>
-                    <h3>{item.title}</h3>
-                    <div className="muted-label">{item.company}</div>
-                    <ul>
-                      {item.points.map((point) => <li key={point}>{point}</li>)}
-                    </ul>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="skills" className="section section-dark">
-          <div className="container">
-            <Reveal className="section-heading">
-              <span className="section-kicker">۰۳ / مهارت‌ها</span>
-              <h2>ابزارهایی برای <em>ساختن.</em></h2>
-            </Reveal>
-
-            <Reveal className="skills-panel">
-              <div className="skill-tabs">
-                {groups.map((group) => (
-                  <button
-                    key={group}
-                    className={activeGroup === group ? 'active' : ''}
-                    onClick={() => setActiveGroup(group)}
-                  >
-                    {group}
-                  </button>
-                ))}
+            <div className="section-head"><Reveal className="section-label">۰۲ — تجربه</Reveal><Reveal><h2>تجربه‌ای که روی <em>محصول واقعی</em> شکل گرفته.</h2></Reveal></div>
+            <Reveal className="experience-card">
+              <div className="experience-year">۱۴۰۲ — ۱۴۰۵</div>
+              <div className="experience-main">
+                <div className="experience-icon"><Briefcase size={18} /></div>
+                <div><span className="eyebrow-small">فریلنسر</span><h3>توسعه‌دهنده نرم‌افزار و فول‌استک</h3></div>
+                <p>توسعه و تحویل سه پروژه واقعی شامل دو سامانه فروشگاهی و یک سامانه مدیریت مدرسه، به‌همراه توسعه و بهبود پروژه‌های موجود.</p>
               </div>
-              <motion.div layout className="skill-cloud">
-                {filteredSkills.map((skill) => (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    key={skill.label}
-                    className="skill-pill"
-                  >
-                    <span className="skill-pulse" />
-                    {skill.label}
-                  </motion.div>
-                ))}
-              </motion.div>
+              <ul>
+                <li>پیاده‌سازی کامل رابط کاربری، API و پایگاه داده</li>
+                <li>رفع خطا و شخصی‌سازی قابلیت‌ها بر اساس نیاز مشتری</li>
+                <li>استقرار و نگهداری پروژه‌های وب</li>
+              </ul>
             </Reveal>
+          </div>
+        </section>
+
+        <section id="skills" className="section skills-section">
+          <div className="container">
+            <Reveal className="section-label">۰۳ — مهارت‌ها</Reveal>
+            <div className="skills-head"><h2>ابزارهایی که با آن‌ها <em>می‌سازم.</em></h2><Zap size={23} /></div>
+            <div className="skill-tabs">{groups.map((group) => <button key={group} className={activeGroup === group ? 'active' : ''} onClick={() => setActiveGroup(group)}>{group}</button>)}</div>
+            <motion.div layout className="skill-cloud">{filteredSkills.map((skill) => <motion.div layout initial={{ opacity: 0, scale: .95 }} animate={{ opacity: 1, scale: 1 }} key={skill.label} className="skill-pill">{skill.label}<span /></motion.div>)}</motion.div>
           </div>
         </section>
 
         <section id="projects" className="section projects-section">
           <div className="container">
-            <Reveal className="section-heading heading-row">
-              <div>
-                <span className="section-kicker">۰۴ / پروژه‌ها</span>
-                <h2>کارهایی که <em>داستان دارند.</em></h2>
-              </div>
-              <span className="heading-note">پروژه‌های منتخب</span>
-            </Reveal>
-
-            <div className="project-list">
+            <Reveal className="section-label">۰۴ — پروژه‌ها</Reveal>
+            <div className="projects-title"><h2>چند نمونه از <em>کارها.</em></h2><span>منتخب پروژه‌ها</span></div>
+            <div className="project-grid">
               {projects.map((project, index) => (
-                <Reveal key={project.title} delay={index * 0.06} className="project-card">
-                  <div className="project-number">{project.number}</div>
-                  <div className="project-info">
-                    <div className="project-category">{project.category}</div>
-                    <h3>{project.title}</h3>
-                    <p>{project.description}</p>
-                    <div className="project-stack">{project.stack}</div>
-                  </div>
-                  <div className="project-arrow">
-                    {project.placeholder ? <span className="coming-soon">در حال تکمیل</span> : <ArrowUpLeft size={22} />}
-                  </div>
+                <Reveal key={project.title} delay={index * .05} className={project.featured ? 'project-card featured' : 'project-card'}>
+                  <div className="project-top"><span>{project.number}</span><span>{project.category}</span></div>
+                  <div className="project-body"><h3>{project.title}</h3><p>{project.description}</p></div>
+                  <div className="project-bottom"><span>{project.stack}</span>{project.placeholder ? <small>در حال تکمیل</small> : <ArrowUpLeft size={18} />}</div>
                 </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="education" className="section section-dark education-section">
-          <div className="container">
-            <Reveal className="education-card">
-              <div className="education-icon"><GraduationCap size={27} /></div>
-              <div>
-                <span className="section-kicker">۰۵ / تحصیلات</span>
-                <h2>کارشناسی مهندسی کامپیوتر</h2>
-                <p>دانشگاه صنعتی ارومیه · ۱۴۰۱ — ۱۴۰۵</p>
-              </div>
-              <div className="education-thesis">
-                <span>پایان‌نامه</span>
-                <strong>بهینه‌سازی معماری شبکه‌های PINN با استفاده از جست‌وجوی معماری عصبی</strong>
-              </div>
+        <section id="education" className="section education-section">
+          <div className="container education-layout">
+            <Reveal className="section-label">۰۵ — تحصیلات</Reveal>
+            <Reveal className="education-main">
+              <div className="education-icon"><GraduationCap size={24} /></div>
+              <span>دانشگاه صنعتی ارومیه · ۱۴۰۱ — ۱۴۰۵</span>
+              <h2>کارشناسی مهندسی کامپیوتر</h2>
+              <p>پایان‌نامه: بهینه‌سازی معماری شبکه‌های PINN با استفاده از جست‌وجوی معماری عصبی</p>
             </Reveal>
           </div>
         </section>
 
-        <section id="contact" className="section contact-section">
-          <div className="contact-grid" />
-          <div className="container">
-            <Reveal className="contact-content">
-              <span className="section-kicker">۰۶ / ارتباط</span>
-              <h2>بیایید چیزی <em>خوب بسازیم.</em></h2>
-              <p>
-                برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید،
-                می‌توانید از طریق GitHub با من در ارتباط باشید.
-              </p>
-              <a
-                className="primary-button contact-button"
-                href="https://github.com/ParsaR082"
-                target="_blank"
-                rel="noreferrer"
-              >
-                مشاهده GitHub
-                <ExternalLink size={17} />
-              </a>
-            </Reveal>
+        <section id="contact" className="contact-section">
+          <div className="container contact-inner">
+            <Reveal className="section-label">۰۶ — ارتباط</Reveal>
+            <Reveal><h2>ایده‌ای دارید؟<br /><em>بیایید بسازیم.</em></h2></Reveal>
+            <Reveal delay={.08}><p>برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید، از طریق GitHub با من در ارتباط باشید.</p></Reveal>
+            <a className="button button-dark" href="https://github.com/ParsaR082" target="_blank" rel="noreferrer">مشاهده GitHub <ExternalLink size={16} /></a>
           </div>
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="container footer-inner">
-          <span>پارسا رحمانی</span>
-          <span>مهندس نرم‌افزار · هوش مصنوعی</span>
-          <a href="https://github.com/ParsaR082" target="_blank" rel="noreferrer">
-            <Github size={16} /> GitHub
-          </a>
-        </div>
-      </footer>
+      <footer className="footer"><div className="container footer-inner"><span>پارسا رحمانی</span><span>مهندس نرم‌افزار · هوش مصنوعی</span><a href="https://github.com/ParsaR082" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a></div></footer>
     </div>
   );
 }
