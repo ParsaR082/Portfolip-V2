@@ -11,6 +11,8 @@ import {
   Code2,
   ExternalLink,
   Github,
+  Mail,
+  Phone,
   GraduationCap,
   Menu,
   Sparkles,
@@ -249,7 +251,19 @@ export default function HomePage() {
           <div className="container contact-inner">
             <Reveal className="section-label">۰۶ — ارتباط</Reveal>
             <Reveal><h2>ایده‌ای دارید؟<br /><em>بیایید بسازیم.</em></h2></Reveal>
-            <Reveal delay={.08}><p>برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید، از طریق GitHub با من در ارتباط باشید.</p></Reveal>
+            <Reveal delay={.08}><p>برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید، می‌توانید مستقیماً از طریق تلفن یا ایمیل با من در ارتباط باشید.</p></Reveal>
+            <Reveal delay={.12} className="contact-methods">
+              <a className="contact-method" href="tel:+989145120736" aria-label="تماس با پارسا رحمانی">
+                <span className="contact-method-icon"><Phone size={18} /></span>
+                <span><small>تلفن</small><strong dir="ltr">+98 914 512 0736</strong></span>
+                <ArrowLeft size={16} />
+              </a>
+              <a className="contact-method" href="mailto:Prahmani082@gmail.com?subject=درخواست همکاری&body=سلام پارسا،%0A%0Aدر مورد یک پروژه یا فرصت همکاری با شما تماس گرفته‌ام.%0A%0A" aria-label="ارسال ایمیل به پارسا رحمانی">
+                <span className="contact-method-icon"><Mail size={18} /></span>
+                <span><small>ایمیل</small><strong dir="ltr">Prahmani082@gmail.com</strong></span>
+                <ArrowLeft size={16} />
+              </a>
+            </Reveal>
             <a className="button button-dark" href="https://github.com/ParsaR082" target="_blank" rel="noreferrer">مشاهده GitHub <ExternalLink size={16} /></a>
           </div>
         </section>
