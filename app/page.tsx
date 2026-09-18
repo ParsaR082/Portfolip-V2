@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowUpLeft,
-  BriefcaseBusiness,
+  Briefcase,
   Check,
   ChevronDown,
   Code2,
@@ -374,7 +374,7 @@ export default function HomePage() {
                   <div className="timeline-period">{item.period}</div>
                   <div className="timeline-dot" />
                   <div className="timeline-content">
-                    <div className="experience-icon"><BriefcaseBusiness size={19} /></div>
+                    <div className="experience-icon"><Briefcase size={19} /></div>
                     <h3>{item.title}</h3>
                     <div className="muted-label">{item.company}</div>
                     <ul>
