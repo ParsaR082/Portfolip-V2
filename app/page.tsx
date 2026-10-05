@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -136,8 +136,18 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState('همه');
   const [progress, setProgress] = useState(0);
-  const [introActive, setIntroActive] = useState(true);
+  const [introPhase, setIntroPhase] = useState<'playing' | 'transforming' | 'settled'>('playing');
   const [activeSection, setActiveSection] = useState(0);
+
+  const startTransformation = useCallback(() => {
+    setIntroPhase((current) => {
+      if (current !== 'playing') return current;
+      setTimeout(() => {
+        setIntroPhase('settled');
+      }, 1200);
+      return 'transforming';
+    });
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -173,16 +183,29 @@ export default function HomePage() {
 
   return (
     <div dir="rtl" className="site-shell">
-      {introActive && (
-        <CinematicIntro onComplete={() => setIntroActive(false)} />
-      )}
-      <div className="scroll-progress" style={{ width: `${progress}%` }} />
+      <CinematicIntro phase={introPhase} onStartTransform={startTransformation} />
+      <div
+        className="scroll-progress"
+        style={{
+          width: `${progress}%`,
+          opacity: introPhase === 'settled' ? 1 : 0,
+          transition: 'opacity 0.6s ease',
+        }}
+      />
 
       <div className="ambient ambient-one" />
       <div className="ambient ambient-two" />
       <div className="ambient ambient-three" />
 
-      <header className="topbar">
+      <header
+        className="topbar"
+        style={{
+          transform: introPhase === 'playing' ? 'translateY(-60px)' : 'translateY(0)',
+          opacity: introPhase === 'playing' ? 0 : 1,
+          transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease',
+          pointerEvents: introPhase === 'settled' ? 'auto' : 'none',
+        }}
+      >
         <div className="nav-wrap">
           <button className="brand" onClick={() => scrollTo('hero')} aria-label="بازگشت به ابتدای صفحه">
             <span className="brand-mark"><span /></span>
@@ -240,7 +263,7 @@ export default function HomePage() {
         sectionIds={sectionIds}
         activeSection={activeSection}
         onSectionChange={setActiveSection}
-        isIntroActive={introActive}
+        isIntroActive={introPhase !== 'settled'}
       >
         <main>
           <section id="hero" className="hero section">
@@ -249,8 +272,11 @@ export default function HomePage() {
             <motion.div
               className="eyebrow"
               initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              animate={{
+                opacity: introPhase === 'playing' ? 0 : 1,
+                y: introPhase === 'playing' ? 15 : 0,
+              }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="eyebrow-dot" />
               مهندس نرم‌افزار · هوش مصنوعی
@@ -258,8 +284,11 @@ export default function HomePage() {
 
             <motion.h1
               initial={{ opacity: 0, y: 35 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+              animate={{
+                opacity: introPhase === 'playing' ? 0 : 1,
+                y: introPhase === 'playing' ? 35 : 0,
+              }}
+              transition={{ duration: 0.85, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
             >
               ایده‌ها را به
               <span className="gradient-word"> تجربه‌های دیجیتال </span>
@@ -269,8 +298,11 @@ export default function HomePage() {
             <motion.p
               className="hero-copy"
               initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25 }}
+              animate={{
+                opacity: introPhase === 'playing' ? 0 : 1,
+                y: introPhase === 'playing' ? 25 : 0,
+              }}
+              transition={{ duration: 0.75, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
             >
               توسعه‌دهنده نرم‌افزار با تمرکز بر ساخت محصولات فول‌استک و تجربه عملی
               در هوش مصنوعی و یادگیری عمیق؛ از معماری و کدنویسی تا حل مسئله و
@@ -280,8 +312,11 @@ export default function HomePage() {
             <motion.div
               className="hero-actions"
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              animate={{
+                opacity: introPhase === 'playing' ? 0 : 1,
+                y: introPhase === 'playing' ? 20 : 0,
+              }}
+              transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
             >
               <button className="primary-button" onClick={() => scrollTo('projects')}>
                 مشاهده پروژه‌ها
@@ -301,8 +336,8 @@ export default function HomePage() {
             <motion.div
               className="hero-meta"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
+              animate={{ opacity: introPhase === 'playing' ? 0 : 1 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
             >
               <span><Check size={15} /> فارغ‌التحصیل مهندسی کامپیوتر</span>
               <span><Check size={15} /> ۳ سال تجربه فریلنسری</span>
@@ -312,32 +347,67 @@ export default function HomePage() {
 
           <motion.div
             className="hero-art"
-            initial={{ opacity: 0, scale: 0.88, rotate: 4 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: introPhase === 'playing' ? 0 : 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="orbit orbit-a" />
             <div className="orbit orbit-b" />
             <div className="orbit orbit-c" />
-            <motion.div
-              className="code-card"
-              animate={{ y: [0, -10, 0], rotate: [0, 0.6, 0] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className="code-top">
-                <span /><span /><span />
-                <small>portfolio.tsx</small>
-              </div>
-              <div className="code-body" dir="ltr">
-                <span className="line muted">01</span><span className="pink">const</span> <span className="blue">developer</span> = {'{'}<br />
-                <span className="line muted">02</span>&nbsp;&nbsp;name: <span className="green">&quot;Parsa&quot;</span>,<br />
-                <span className="line muted">03</span>&nbsp;&nbsp;focus: [<span className="green">&quot;AI&quot;</span>, <span className="green">&quot;Full-Stack&quot;</span>],<br />
-                <span className="line muted">04</span>&nbsp;&nbsp;build: <span className="yellow">true</span>,<br />
-                <span className="line muted">05</span>&nbsp;&nbsp;curiosity: <span className="yellow">∞</span><br />
-                <span className="line muted">06</span>{'}'}
-              </div>
-              <div className="code-glow" />
-            </motion.div>
+
+            <div className="hero-art-composite">
+              {introPhase !== 'playing' && (
+                <motion.div
+                  layoutId="parsa-portrait-card"
+                  className="hero-docked-portrait"
+                  transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="hero-docked-portrait-img-wrap">
+                    <motion.div
+                      layoutId="parsa-portrait-img-inner"
+                      className="hero-docked-portrait-img-inner"
+                    >
+                      <img
+                        src="/parsa.jpg"
+                        alt="پارسا رحمانی - Parsa Rahmani"
+                        className="hero-docked-portrait-img"
+                      />
+                    </motion.div>
+                  </div>
+                  <div className="hero-docked-portrait-info">
+                    <div className="hero-docked-portrait-top">
+                      <span className="hero-docked-portrait-name">پارسا رحمانی</span>
+                      <span className="hero-status-pill">
+                        <span className="hero-status-dot" />
+                        آماده همکاری
+                      </span>
+                    </div>
+                    <span className="hero-docked-portrait-role">مهندس نرم‌افزار · هوش مصنوعی و فول‌استک</span>
+                  </div>
+                </motion.div>
+              )}
+
+              <motion.div
+                className="code-card"
+                animate={{ y: [0, -10, 0], rotate: [0, 0.6, 0] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <div className="code-top">
+                  <span /><span /><span />
+                  <small>portfolio.tsx</small>
+                </div>
+                <div className="code-body" dir="ltr">
+                  <span className="line muted">01</span><span className="pink">const</span> <span className="blue">developer</span> = {'{'}<br />
+                  <span className="line muted">02</span>&nbsp;&nbsp;name: <span className="green">&quot;Parsa&quot;</span>,<br />
+                  <span className="line muted">03</span>&nbsp;&nbsp;focus: [<span className="green">&quot;AI&quot;</span>, <span className="green">&quot;Full-Stack&quot;</span>],<br />
+                  <span className="line muted">04</span>&nbsp;&nbsp;build: <span className="yellow">true</span>,<br />
+                  <span className="line muted">05</span>&nbsp;&nbsp;curiosity: <span className="yellow">∞</span><br />
+                  <span className="line muted">06</span>{'}'}
+                </div>
+                <div className="code-glow" />
+              </motion.div>
+            </div>
+
             <div className="floating-chip chip-one"><Code2 size={15} /> فول‌استک</div>
             <div className="floating-chip chip-two"><Sparkles size={15} /> هوش مصنوعی</div>
             <div className="floating-chip chip-three"><Zap size={15} /> حل مسئله</div>
