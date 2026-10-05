@@ -40,9 +40,9 @@ const Hero3D = ({ onScrollToProjects }: Hero3DProps) => {
     checkWebGLSupport();
   }, []);
 
-  const handleCanvasError = (error: Error) => {
+  const handleCanvasError = (error: unknown) => {
     console.error('Canvas error:', error);
-    setCanvasError(error);
+    setCanvasError(error instanceof Error ? error : new Error(String(error)));
   };
 
   const retryCanvas = () => {
@@ -76,7 +76,7 @@ const Hero3D = ({ onScrollToProjects }: Hero3DProps) => {
         <ErrorBoundary
           FallbackComponent={({ error }) => (
             <div className="h-full flex items-center justify-center">
-              <ErrorFallback error={error} retry={retryCanvas} />
+              <ErrorFallback error={error instanceof Error ? error : new Error(String(error))} retry={retryCanvas} />
             </div>
           )}
           onError={handleCanvasError}

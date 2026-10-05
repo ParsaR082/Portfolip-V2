@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowUpLeft,
-  BriefcaseBusiness,
+  Briefcase,
   Check,
   ChevronDown,
   Code2,
@@ -17,6 +17,19 @@ import {
   X,
   Zap,
 } from 'lucide-react';
+import CinematicIntro from '../components/CinematicIntro';
+import SectionScrollController from '../components/SectionScrollController';
+import KineticLetterHeading from '../components/KineticLetterHeading';
+
+const sectionIds = [
+  'hero',
+  'about',
+  'experience',
+  'skills',
+  'projects',
+  'education',
+  'contact',
+];
 
 const skills = [
   { label: 'TypeScript', group: 'برنامه‌نویسی' },
@@ -123,6 +136,8 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState('همه');
   const [progress, setProgress] = useState(0);
+  const [introActive, setIntroActive] = useState(true);
+  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
     const onScroll = () => {
@@ -149,11 +164,18 @@ export default function HomePage() {
 
   const scrollTo = (id: string) => {
     setMenuOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof window !== 'undefined' && (window as any).__portfolioNavigateTo) {
+      (window as any).__portfolioNavigateTo(id);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <div dir="rtl" className="site-shell">
+      {introActive && (
+        <CinematicIntro onComplete={() => setIntroActive(false)} />
+      )}
       <div className="scroll-progress" style={{ width: `${progress}%` }} />
 
       <div className="ambient ambient-one" />
@@ -214,8 +236,14 @@ export default function HomePage() {
         </AnimatePresence>
       </header>
 
-      <main>
-        <section id="hero" className="hero section">
+      <SectionScrollController
+        sectionIds={sectionIds}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        isIntroActive={introActive}
+      >
+        <main>
+          <section id="hero" className="hero section">
           <div className="hero-grid" />
           <div className="hero-content">
             <motion.div
@@ -324,8 +352,12 @@ export default function HomePage() {
         <section id="about" className="section section-dark">
           <div className="container">
             <Reveal className="section-heading">
-              <span className="section-kicker">۰۱ / درباره من</span>
-              <h2>مهندسی با ذهنیت <em>حل مسئله.</em></h2>
+              <KineticLetterHeading
+                text="مهندسی با ذهنیت حل مسئله."
+                kicker="۰۱ / درباره من"
+                isActive={activeSection === 1}
+                highlightWords={['حل', 'مسئله.']}
+              />
             </Reveal>
 
             <div className="about-grid">
@@ -364,8 +396,12 @@ export default function HomePage() {
         <section id="experience" className="section">
           <div className="container">
             <Reveal className="section-heading">
-              <span className="section-kicker">۰۲ / تجربه</span>
-              <h2>چیزهایی که در <em>دنیای واقعی</em> ساخته‌ام.</h2>
+              <KineticLetterHeading
+                text="چیزهایی که در دنیای واقعی ساخته‌ام."
+                kicker="۰۲ / تجربه"
+                isActive={activeSection === 2}
+                highlightWords={['دنیای', 'واقعی']}
+              />
             </Reveal>
 
             <div className="timeline">
@@ -374,7 +410,7 @@ export default function HomePage() {
                   <div className="timeline-period">{item.period}</div>
                   <div className="timeline-dot" />
                   <div className="timeline-content">
-                    <div className="experience-icon"><BriefcaseBusiness size={19} /></div>
+                    <div className="experience-icon"><Briefcase size={19} /></div>
                     <h3>{item.title}</h3>
                     <div className="muted-label">{item.company}</div>
                     <ul>
@@ -390,8 +426,12 @@ export default function HomePage() {
         <section id="skills" className="section section-dark">
           <div className="container">
             <Reveal className="section-heading">
-              <span className="section-kicker">۰۳ / مهارت‌ها</span>
-              <h2>ابزارهایی برای <em>ساختن.</em></h2>
+              <KineticLetterHeading
+                text="ابزارهایی برای ساختن."
+                kicker="۰۳ / مهارت‌ها"
+                isActive={activeSection === 3}
+                highlightWords={['ساختن.']}
+              />
             </Reveal>
 
             <Reveal className="skills-panel">
@@ -428,8 +468,12 @@ export default function HomePage() {
           <div className="container">
             <Reveal className="section-heading heading-row">
               <div>
-                <span className="section-kicker">۰۴ / پروژه‌ها</span>
-                <h2>کارهایی که <em>داستان دارند.</em></h2>
+                <KineticLetterHeading
+                  text="کارهایی که داستان دارند."
+                  kicker="۰۴ / پروژه‌ها"
+                  isActive={activeSection === 4}
+                  highlightWords={['داستان', 'دارند.']}
+                />
               </div>
               <span className="heading-note">پروژه‌های منتخب</span>
             </Reveal>
@@ -458,8 +502,11 @@ export default function HomePage() {
             <Reveal className="education-card">
               <div className="education-icon"><GraduationCap size={27} /></div>
               <div>
-                <span className="section-kicker">۰۵ / تحصیلات</span>
-                <h2>کارشناسی مهندسی کامپیوتر</h2>
+                <KineticLetterHeading
+                  text="کارشناسی مهندسی کامپیوتر"
+                  kicker="۰۵ / تحصیلات"
+                  isActive={activeSection === 5}
+                />
                 <p>دانشگاه صنعتی ارومیه · ۱۴۰۱ — ۱۴۰۵</p>
               </div>
               <div className="education-thesis">
@@ -474,8 +521,12 @@ export default function HomePage() {
           <div className="contact-grid" />
           <div className="container">
             <Reveal className="contact-content">
-              <span className="section-kicker">۰۶ / ارتباط</span>
-              <h2>بیایید چیزی <em>خوب بسازیم.</em></h2>
+              <KineticLetterHeading
+                text="بیایید چیزی خوب بسازیم."
+                kicker="۰۶ / ارتباط"
+                isActive={activeSection === 6}
+                highlightWords={['خوب', 'بسازیم.']}
+              />
               <p>
                 برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید،
                 می‌توانید از طریق GitHub با من در ارتباط باشید.
@@ -493,6 +544,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+    </SectionScrollController>
 
       <footer className="footer">
         <div className="container footer-inner">

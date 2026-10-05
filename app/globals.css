@@ -214,3 +214,241 @@ a { color: inherit; text-decoration: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ==========================================================================
+   CODROPS KINETIC TYPOGRAPHY INTRO & CONTROLLED SCROLL SYSTEM STYLES
+   ========================================================================== */
+
+/* Fullscreen cinematic intro overlay */
+.kinetic-intro-root {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 99999;
+  background: #08090b;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.kinetic-intro-skip {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(18, 20, 24, 0.75);
+  backdrop-filter: blur(12px);
+  color: #c9ccd2;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.kinetic-intro-skip:hover {
+  border-color: rgba(183, 255, 74, 0.45);
+  color: var(--accent);
+  transform: translateY(-2px);
+  background: rgba(24, 28, 34, 0.9);
+}
+
+/* Massive background kinetic typography grid (Codrops TypeTransition) */
+.kinetic-type-container {
+  position: absolute;
+  width: 140vmax;
+  height: 140vmax;
+  top: 50%;
+  left: 50%;
+  margin-top: -70vmax;
+  margin-left: -70vmax;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+}
+
+.kinetic-type-line {
+  white-space: nowrap;
+  font-size: clamp(3rem, 7.5vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  will-change: transform, opacity;
+}
+
+.kinetic-separator {
+  color: var(--accent);
+  opacity: 0.85;
+  font-size: 0.7em;
+}
+
+/* Center card with Codrops curtain image reveal */
+.kinetic-intro-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.kinetic-curtain-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  border-radius: 32px;
+  background: rgba(12, 14, 18, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  max-width: 90vw;
+}
+
+/* Signature Codrops counter-sliding curtain wrapper */
+.kinetic-curtain-img-wrap {
+  width: clamp(230px, 26vw, 320px);
+  height: clamp(230px, 26vw, 320px);
+  overflow: hidden;
+  border-radius: 22px;
+  position: relative;
+  border: 1px solid rgba(183, 255, 74, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(183, 255, 74, 0.15);
+}
+
+.kinetic-curtain-img-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  will-change: transform;
+}
+
+.kinetic-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.04) brightness(1.02);
+}
+
+.kinetic-card-meta {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.kinetic-card-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kinetic-card-title {
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: #ffffff;
+}
+
+.kinetic-card-tagline {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   CODROPS ON-SCROLL LETTER ANIMATIONS TYPOGRAPHY
+   ========================================================================== */
+
+.kinetic-letter-heading-wrap {
+  display: block;
+}
+
+.kinetic-letter-heading {
+  margin: 0;
+  line-height: 1.25;
+}
+
+.kinetic-word-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: pre;
+}
+
+.kinetic-word {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
+}
+
+.kinetic-char {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
+}
+
+.kinetic-space {
+  display: inline-block;
+  user-select: none;
+}
+
+.kinetic-highlight, .kinetic-letter-heading em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+/* ==========================================================================
+   CONTROLLED SECTION-BY-SECTION SCROLLING LAYOUT
+   ========================================================================== */
+
+.controlled-scroll-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Each major section occupies minimum 100dvh for deliberate full-screen snap */
+@media (min-width: 901px) {
+  .section {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 0;
+    scroll-margin-top: 0;
+  }
+
+  .hero {
+    min-height: 100dvh;
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+}
+
