@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { useScrollDir } from './MotionPrimitives';
 
 interface KineticLetterHeadingProps {
   text: string;
@@ -18,7 +19,8 @@ interface KineticLetterHeadingProps {
  * Formula from Codrops OnScrollLetterAnimations (Demo 3 & Demo 2):
  * factor = j < Math.ceil(total/2) ? j : Math.ceil(total/2) - Math.abs(Math.floor(total/2) - j) - 1
  * Applied to characters and words with parabolic vertical translation, rotation, and scale.
- * Designed so headings are always clearly readable, never blank or invisible!
+ * Fully reversible: animates in when entering viewport, recedes subtly when exiting viewport,
+ * and replays smoothly whenever returning!
  */
 export default function KineticLetterHeading({
   text,
@@ -29,17 +31,43 @@ export default function KineticLetterHeading({
   highlightWords = [],
   kicker,
 }: KineticLetterHeadingProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(containerRef, { once: false, margin: '-6% 0px -6% 0px' });
+  const shouldReduceMotion = useReducedMotion();
+  const scrollDir = useScrollDir();
+
+  const isVisible = inView && isActive;
+  const exitY = scrollDir === 'down' ? -14 : 14;
+
   const words = text.split(' ');
   const wordsTotal = words.length;
 
   const Tag = as;
 
+  if (shouldReduceMotion) {
+    return (
+      <div className="kinetic-letter-heading-wrap">
+        {kicker && <span className="section-kicker block mb-2">{kicker}</span>}
+        <Tag className={`kinetic-letter-heading ${className}`}>{text}</Tag>
+      </div>
+    );
+  }
+
   return (
-    <div className="kinetic-letter-heading-wrap">
+    <div ref={containerRef} className="kinetic-letter-heading-wrap">
       {kicker && (
-        <span className="section-kicker block mb-2">
+        <motion.span
+          className="section-kicker block mb-2"
+          initial={{ opacity: 0, y: 10 }}
+          animate={
+            isVisible
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: exitY * 0.7 }
+          }
+          transition={{ duration: 0.5, delay: delay * 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
           {kicker}
-        </span>
+        </motion.span>
       )}
 
       <Tag className={`kinetic-letter-heading ${className}`}>
@@ -69,25 +97,25 @@ export default function KineticLetterHeading({
               <span key={wordIndex} className="kinetic-word-wrap">
                 <motion.span
                   className={`kinetic-word ${isHighlighted ? 'kinetic-highlight' : ''}`}
-                  initial={{ opacity: 1, y: 0, rotate: 0 }}
+                  initial={{ opacity: 0, y: initialY }}
                   animate={
-                    isActive
+                    isVisible
                       ? {
-                          opacity: 1,
-                          y: [initialY, 0],
-                          rotate: [initialRotate, 0],
-                          scale: [0.94, 1],
-                        }
-                      : {
                           opacity: 1,
                           y: 0,
                           rotate: 0,
                           scale: 1,
                         }
+                      : {
+                          opacity: 0,
+                          y: exitY,
+                          rotate: 0,
+                          scale: 0.97,
+                        }
                   }
                   transition={{
-                    duration: 0.7,
-                    delay: delay + wordIndex * 0.04,
+                    duration: isVisible ? 0.65 : 0.4,
+                    delay: isVisible ? delay + wordIndex * 0.04 : 0,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -110,34 +138,32 @@ export default function KineticLetterHeading({
                       1;
 
                 const initialY = (charFactor + 1) * 12;
-                const initialRotate =
-                  charIndex < charsTotal / 2
-                    ? charFactor * 3.5
-                    : -charFactor * 3.5;
 
                 return (
                   <motion.span
                     key={charIndex}
                     className="kinetic-char"
-                    initial={{ opacity: 1, y: 0, rotate: 0 }}
+                    initial={{ opacity: 0, y: initialY }}
                     animate={
-                      isActive
+                      isVisible
                         ? {
-                            opacity: 1,
-                            y: [initialY, 0],
-                            rotate: [initialRotate, 0],
-                            scale: [0.92, 1],
-                          }
-                        : {
                             opacity: 1,
                             y: 0,
                             rotate: 0,
                             scale: 1,
                           }
+                        : {
+                            opacity: 0,
+                            y: exitY,
+                            rotate: 0,
+                            scale: 0.97,
+                          }
                     }
                     transition={{
-                      duration: 0.65,
-                      delay: delay + wordIndex * 0.04 + charIndex * 0.015,
+                      duration: isVisible ? 0.6 : 0.35,
+                      delay: isVisible
+                        ? delay + wordIndex * 0.04 + charIndex * 0.015
+                        : 0,
                       ease: [0.22, 1, 0.36, 1],
                     }}
                   >

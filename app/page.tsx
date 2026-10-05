@@ -29,6 +29,8 @@ import {
   ScaleFade,
   SlideIn,
   LineDraw,
+  ScrollProvider,
+  useScrollDir,
   ease,
 } from '../components/MotionPrimitives';
 
@@ -121,13 +123,14 @@ const experience = [
 
 const groups = ['همه', 'برنامه‌نویسی', 'توسعه وب', 'هوش مصنوعی', 'پایگاه داده', 'ابزارها'];
 
-export default function HomePage() {
+function PortfolioContent() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState('همه');
   const [progress, setProgress] = useState(0);
   const [introPhase, setIntroPhase] = useState<'playing' | 'transforming' | 'settled'>('playing');
   const [activeSection, setActiveSection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const scrollDir = useScrollDir();
 
   // Responsive mobile detection for Opening & layout
   useEffect(() => {
@@ -180,6 +183,13 @@ export default function HomePage() {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Hero reversible entrance and exit:
+  // When activeSection === 0 and introPhase !== 'playing': Hero elements are visible.
+  // When activeSection > 0: Hero elements subtly exit toward the top!
+  // When activeSection returns to 0: Hero elements animate back in!
+  const isHeroInView = introPhase === 'settled' ? activeSection === 0 : introPhase !== 'playing';
+  const heroExitY = scrollDir === 'down' ? -22 : 22;
 
   return (
     <div dir="rtl" className="site-shell">
@@ -352,9 +362,9 @@ export default function HomePage() {
         <main>
           {/* ========================================================
               HERO SECTION
-              1. Kinetic intro kinetic typography
+              1. Kinetic intro kinetic typography (one-time on page load)
               2. Single persistent motorcycle backdrop (Opening -> Hero)
-              3. Staged assembly of Hero elements
+              3. Fully reversible Hero content elements
               ======================================================== */}
           <section id="hero" className="hero section container">
             {/* 1. CINEMATIC INTRO (Kinetic typography backdrop during opening) */}
@@ -410,18 +420,19 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            {/* 3. HERO CONTENT (Staged entrance hierarchy) */}
+            {/* 3. HERO CONTENT (Direction-aware reversible staged entrance/exit) */}
             <motion.div
               className="hero-content"
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={
-                introPhase === 'playing'
-                  ? { opacity: 0, pointerEvents: 'none' }
-                  : { opacity: 1, pointerEvents: 'auto' }
+                isHeroInView
+                  ? { opacity: 1, y: 0, pointerEvents: 'auto' }
+                  : { opacity: 0, y: heroExitY, pointerEvents: 'none' }
               }
               transition={{
-                duration: 0.8,
+                duration: isHeroInView ? 0.8 : 0.45,
                 delay: introPhase === 'transforming' ? 0.45 : 0,
+                ease: ease.cinematic,
               }}
             >
               {/* Eyebrow */}
@@ -429,13 +440,13 @@ export default function HomePage() {
                 className="eyebrow"
                 initial={{ opacity: 0, y: 16 }}
                 animate={
-                  introPhase === 'playing'
-                    ? { opacity: 0, y: 16 }
-                    : { opacity: 1, y: 0 }
+                  isHeroInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: heroExitY * 0.7 }
                 }
                 transition={{
                   duration: 0.6,
-                  delay: introPhase === 'transforming' ? 0.48 : 0.08,
+                  delay: introPhase === 'transforming' ? 0.48 : (isHeroInView ? 0.08 : 0),
                   ease: ease.cinematic,
                 }}
               >
@@ -447,13 +458,13 @@ export default function HomePage() {
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={
-                  introPhase === 'playing'
-                    ? { opacity: 0, y: 28 }
-                    : { opacity: 1, y: 0 }
+                  isHeroInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: heroExitY }
                 }
                 transition={{
                   duration: 0.75,
-                  delay: introPhase === 'transforming' ? 0.6 : 0.18,
+                  delay: introPhase === 'transforming' ? 0.6 : (isHeroInView ? 0.16 : 0),
                   ease: ease.cinematic,
                 }}
               >
@@ -467,13 +478,13 @@ export default function HomePage() {
                 className="hero-copy"
                 initial={{ opacity: 0, y: 20 }}
                 animate={
-                  introPhase === 'playing'
-                    ? { opacity: 0, y: 20 }
-                    : { opacity: 1, y: 0 }
+                  isHeroInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: heroExitY * 0.8 }
                 }
                 transition={{
                   duration: 0.7,
-                  delay: introPhase === 'transforming' ? 0.72 : 0.28,
+                  delay: introPhase === 'transforming' ? 0.72 : (isHeroInView ? 0.24 : 0),
                   ease: ease.cinematic,
                 }}
               >
@@ -487,13 +498,13 @@ export default function HomePage() {
                 className="hero-actions"
                 initial={{ opacity: 0, y: 18 }}
                 animate={
-                  introPhase === 'playing'
-                    ? { opacity: 0, y: 18 }
-                    : { opacity: 1, y: 0 }
+                  isHeroInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: heroExitY * 0.8 }
                 }
                 transition={{
                   duration: 0.7,
-                  delay: introPhase === 'transforming' ? 0.84 : 0.38,
+                  delay: introPhase === 'transforming' ? 0.84 : (isHeroInView ? 0.32 : 0),
                   ease: ease.cinematic,
                 }}
               >
@@ -524,13 +535,13 @@ export default function HomePage() {
                 className="hero-meta"
                 initial={{ opacity: 0, y: 14 }}
                 animate={
-                  introPhase === 'playing'
-                    ? { opacity: 0, y: 14 }
-                    : { opacity: 1, y: 0 }
+                  isHeroInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: heroExitY * 0.6 }
                 }
                 transition={{
                   duration: 0.7,
-                  delay: introPhase === 'transforming' ? 0.96 : 0.48,
+                  delay: introPhase === 'transforming' ? 0.96 : (isHeroInView ? 0.4 : 0),
                   ease: ease.cinematic,
                 }}
               >
@@ -545,13 +556,13 @@ export default function HomePage() {
               className="hero-art"
               initial={{ opacity: 0, scale: 0.92, y: 24 }}
               animate={
-                introPhase === 'playing'
-                  ? { opacity: 0, scale: 0.92, y: 24, pointerEvents: 'none' }
-                  : { opacity: 1, scale: 1, y: 0, pointerEvents: 'auto' }
+                isHeroInView
+                  ? { opacity: 1, scale: 1, y: 0, pointerEvents: 'auto' }
+                  : { opacity: 0, scale: 0.95, y: heroExitY, pointerEvents: 'none' }
               }
               transition={{
-                duration: 0.9,
-                delay: introPhase === 'transforming' ? 0.65 : 0.22,
+                duration: isHeroInView ? 0.9 : 0.45,
+                delay: introPhase === 'transforming' ? 0.65 : (isHeroInView ? 0.18 : 0),
                 ease: ease.cinematic,
               }}
             >
@@ -589,9 +600,9 @@ export default function HomePage() {
               onClick={() => scrollTo('about')}
               aria-label="ادامه"
               initial={{ opacity: 0 }}
-              animate={{ opacity: introPhase === 'settled' ? 1 : 0 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-              style={{ pointerEvents: introPhase === 'settled' ? 'auto' : 'none' }}
+              animate={{ opacity: isHeroInView && introPhase === 'settled' ? 1 : 0 }}
+              transition={{ duration: 0.5, delay: isHeroInView ? 0.9 : 0 }}
+              style={{ pointerEvents: isHeroInView && introPhase === 'settled' ? 'auto' : 'none' }}
             >
               <span>ادامه</span>
               <ChevronDown size={17} />
@@ -599,12 +610,11 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              ABOUT SECTION
-              Coordinated reveal: heading -> lead -> copy -> stat cards
+              ABOUT SECTION (Fully reversible entrance & exit)
               ======================================================== */}
           <section id="about" className="section section-dark">
             <div className="container">
-              <FadeUp className="section-heading" delay={0.05}>
+              <FadeUp className="section-heading" delay={0.05} margin="-6% 0px -6% 0px">
                 <KineticLetterHeading
                   text="مهندسی با ذهنیت حل مسئله."
                   kicker="۰۱ / درباره من"
@@ -615,7 +625,7 @@ export default function HomePage() {
 
               <div className="about-grid">
                 <div className="about-main">
-                  <ClipReveal direction="up" delay={0.12} duration={0.8}>
+                  <ClipReveal direction="up" delay={0.1} duration={0.8} margin="-6% 0px -6% 0px">
                     <p className="large-text">
                       مسیر من از توسعه نرم‌افزار شروع شده و به ترکیب آن با هوش مصنوعی
                       رسیده است. در پروژه‌های واقعی، از طراحی رابط کاربری و منطق سمت
@@ -624,7 +634,7 @@ export default function HomePage() {
                     </p>
                   </ClipReveal>
 
-                  <FadeUp delay={0.24} distance={18}>
+                  <FadeUp delay={0.2} distance={18} exitDistance={14} margin="-6% 0px -6% 0px">
                     <p>
                       تجربه فریلنسری به من یاد داده است که هر پروژه فقط کدنویسی نیست؛
                       درک مسئله، پیدا کردن راه‌حل، سازگار شدن با نیازهای جدید و
@@ -633,7 +643,7 @@ export default function HomePage() {
                   </FadeUp>
                 </div>
 
-                <StaggerContainer stagger={0.1} delay={0.18} className="about-side">
+                <StaggerContainer stagger={0.1} delay={0.15} margin="-6% 0px -6% 0px" className="about-side">
                   <StaggerItem>
                     <motion.div
                       className="stat-card"
@@ -670,12 +680,11 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              EXPERIENCE SECTION
-              Progressive timeline: stem line -> dot -> cards -> points
+              EXPERIENCE SECTION (Fully reversible timeline & items)
               ======================================================== */}
           <section id="experience" className="section">
             <div className="container">
-              <FadeUp className="section-heading" delay={0.05}>
+              <FadeUp className="section-heading" delay={0.05} margin="-6% 0px -6% 0px">
                 <KineticLetterHeading
                   text="چیزهایی که در دنیای واقعی ساخته‌ام."
                   kicker="۰۲ / تجربه"
@@ -685,25 +694,25 @@ export default function HomePage() {
               </FadeUp>
 
               <div className="timeline">
-                <LineDraw className="timeline-stem-line" orientation="vertical" duration={0.9} />
+                <LineDraw className="timeline-stem-line" orientation="vertical" duration={0.85} margin="-6% 0px -6% 0px" />
 
-                {experience.map((item, idx) => (
+                {experience.map((item) => (
                   <div key={item.period} className="timeline-item">
-                    <SlideIn from="right" delay={0.08} distance={18} className="timeline-period">
+                    <SlideIn from="right" delay={0.08} distance={18} margin="-6% 0px -6% 0px" className="timeline-period">
                       {item.period}
                     </SlideIn>
 
-                    <ScaleFade delay={0.16} fromScale={0.3} className="timeline-dot-wrap">
+                    <ScaleFade delay={0.16} fromScale={0.3} margin="-6% 0px -6% 0px" className="timeline-dot-wrap">
                       <div className="timeline-dot" />
                     </ScaleFade>
 
-                    <FadeUp delay={0.15} distance={22} className="timeline-content">
+                    <FadeUp delay={0.15} distance={22} exitDistance={16} margin="-6% 0px -6% 0px" className="timeline-content">
                       <div className="experience-icon">
                         <Briefcase size={19} />
                       </div>
                       <h3>{item.title}</h3>
                       <div className="muted-label">{item.company}</div>
-                      <StaggerContainer stagger={0.06} delay={0.2} className="experience-points">
+                      <StaggerContainer stagger={0.06} delay={0.18} margin="-6% 0px -6% 0px" className="experience-points">
                         {item.points.map((point) => (
                           <StaggerItem key={point}>
                             <li>{point}</li>
@@ -718,12 +727,11 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              SKILLS SECTION
-              Categories with sliding pill -> Staggered cloud pills
+              SKILLS SECTION (Fully reversible tabs & skill pills)
               ======================================================== */}
           <section id="skills" className="section section-dark">
             <div className="container">
-              <FadeUp className="section-heading" delay={0.05}>
+              <FadeUp className="section-heading" delay={0.05} margin="-6% 0px -6% 0px">
                 <KineticLetterHeading
                   text="ابزارهایی برای ساختن."
                   kicker="۰۳ / مهارت‌ها"
@@ -733,7 +741,7 @@ export default function HomePage() {
               </FadeUp>
 
               <div className="skills-panel">
-                <FadeUp delay={0.12} distance={16} className="skill-tabs-wrap">
+                <FadeUp delay={0.1} distance={16} margin="-6% 0px -6% 0px" className="skill-tabs-wrap">
                   <div className="skill-tabs" role="tablist">
                     {groups.map((group) => {
                       const isSelected = activeGroup === group;
@@ -787,12 +795,11 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              PROJECTS SECTION (Tall section - fully scrollable)
-              Masked/clip reveal -> Staggered cards with rich desktop hover
+              PROJECTS SECTION (Tall section - cards enter & exit individually)
               ======================================================== */}
           <section id="projects" className="section projects-section">
             <div className="container">
-              <FadeUp className="section-heading heading-row" delay={0.05}>
+              <FadeUp className="section-heading heading-row" delay={0.05} margin="-6% 0px -6% 0px">
                 <div>
                   <KineticLetterHeading
                     text="کارهایی که داستان دارند."
@@ -805,11 +812,13 @@ export default function HomePage() {
               </FadeUp>
 
               <div className="project-list">
-                {projects.map((project, index) => (
+                {projects.map((project) => (
                   <FadeUp
                     key={project.title}
-                    delay={index * 0.08}
+                    delay={0.06}
                     distance={26}
+                    exitDistance={20}
+                    margin="-6% 0px -6% 0px"
                     className="project-card-wrap"
                   >
                     <motion.div
@@ -844,18 +853,17 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              EDUCATION SECTION
-              Clean editorial reveal
+              EDUCATION SECTION (Fully reversible editorial reveal)
               ======================================================== */}
           <section id="education" className="section section-dark education-section">
             <div className="container">
-              <FadeUp delay={0.08} distance={24} className="education-card-wrap">
+              <FadeUp delay={0.08} distance={24} exitDistance={18} margin="-6% 0px -6% 0px" className="education-card-wrap">
                 <motion.div
                   className="education-card"
                   whileHover={{ y: -3, borderColor: 'rgba(183, 255, 74, 0.3)' }}
                   transition={{ duration: 0.28 }}
                 >
-                  <ScaleFade delay={0.15} fromScale={0.7} className="education-icon-wrap">
+                  <ScaleFade delay={0.15} fromScale={0.7} margin="-6% 0px -6% 0px" className="education-icon-wrap">
                     <div className="education-icon">
                       <GraduationCap size={27} />
                     </div>
@@ -878,14 +886,13 @@ export default function HomePage() {
           </section>
 
           {/* ========================================================
-              CONTACT SECTION
-              Final movement & purposeful conclusion
+              CONTACT SECTION (Fully reversible conclusion)
               ======================================================== */}
           <section id="contact" className="section contact-section">
             <div className="contact-grid" />
             <div className="container">
               <div className="contact-content">
-                <FadeUp delay={0.06}>
+                <FadeUp delay={0.06} margin="-6% 0px -6% 0px">
                   <KineticLetterHeading
                     text="بیایید چیزی خوب بسازیم."
                     kicker="۰۶ / ارتباط"
@@ -894,14 +901,14 @@ export default function HomePage() {
                   />
                 </FadeUp>
 
-                <FadeUp delay={0.16} distance={18}>
+                <FadeUp delay={0.16} distance={18} exitDistance={14} margin="-6% 0px -6% 0px">
                   <p>
                     برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید،
                     می‌توانید از طریق GitHub با من در ارتباط باشید.
                   </p>
                 </FadeUp>
 
-                <FadeUp delay={0.26} distance={16}>
+                <FadeUp delay={0.24} distance={16} exitDistance={12} margin="-6% 0px -6% 0px">
                   <motion.a
                     className="primary-button contact-button"
                     href="https://github.com/ParsaR082"
@@ -920,9 +927,9 @@ export default function HomePage() {
         </main>
       </SectionScrollController>
 
-      {/* FOOTER */}
+      {/* FOOTER (Fully reversible) */}
       <footer className="footer">
-        <FadeUp delay={0.1} distance={14} className="container footer-inner">
+        <FadeUp delay={0.1} distance={14} exitDistance={10} margin="-4% 0px -4% 0px" className="container footer-inner">
           <span>پارسا رحمانی</span>
           <span>مهندس نرم‌افزار · هوش مصنوعی</span>
           <motion.a
@@ -936,5 +943,13 @@ export default function HomePage() {
         </FadeUp>
       </footer>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <ScrollProvider>
+      <PortfolioContent />
+    </ScrollProvider>
   );
 }

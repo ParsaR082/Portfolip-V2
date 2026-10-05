@@ -30,7 +30,8 @@ const config: Config = {
         card: '#18181b',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-regular)', 'IRANYekanX', 'system-ui', 'sans-serif'],
+        title: ['var(--font-title)', 'Morabba', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
