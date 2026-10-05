@@ -221,21 +221,22 @@ a { color: inherit; text-decoration: none; }
 
 /* Fullscreen cinematic intro overlay */
 .kinetic-intro-root {
-  position: fixed;
+  position: absolute;
   inset: 0;
   width: 100%;
-  height: 100dvh;
-  z-index: 99999;
-  background: #08090b;
+  height: 100%;
+  z-index: 1;
+  background: transparent;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  pointer-events: none;
 }
 
 .kinetic-intro-skip {
-  position: absolute;
+  position: fixed;
   top: 24px;
   left: 24px;
   z-index: 100;
@@ -247,10 +248,12 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(18, 20, 24, 0.75);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #c9ccd2;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  pointer-events: auto;
   transition: all 0.25s ease;
 }
 .kinetic-intro-skip:hover {
@@ -299,14 +302,18 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.7em;
 }
 
-/* Center card with Codrops curtain image reveal */
+/* Opening center metadata badge framed over the photo */
 .kinetic-intro-content {
-  position: relative;
-  z-index: 10;
+  position: absolute;
+  bottom: clamp(24px, 5vh, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 .kinetic-curtain-card {
@@ -540,20 +547,26 @@ a { color: inherit; text-decoration: none; }
 /* Persistent Hero Photograph Backdrop (Single Shared Layer) */
 .hero-photo-stage {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .hero-persistent-photo-wrapper {
   position: relative;
   overflow: hidden;
-  will-change: width, height, border-radius;
+  will-change: width, height, border-radius, box-shadow;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -572,22 +585,15 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at center, rgba(8,9,11,0.2) 0%, rgba(8,9,11,0.7) 100%),
-              linear-gradient(90deg, rgba(8,9,11,0.85) 0%, rgba(8,9,11,0.45) 50%, rgba(8,9,11,0.2) 100%),
+              linear-gradient(90deg, rgba(8,9,11,0.88) 0%, rgba(8,9,11,0.55) 50%, rgba(8,9,11,0.3) 100%),
               linear-gradient(180deg, rgba(8,9,11,0.45) 0%, transparent 40%, rgba(8,9,11,0.92) 100%);
   pointer-events: none;
 }
 
 .hero-content {
   position: relative;
-  z-index: 3;
-  max-width: 680px;
-  padding: 38px 44px;
-  border-radius: 28px;
-  background: rgba(10, 12, 16, 0.65);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 5;
+  max-width: 720px;
 }
 
 .kinetic-intro-badge-pill {
@@ -640,15 +646,6 @@ a { color: inherit; text-decoration: none; }
     justify-content: center;
     padding: 100px 0;
     scroll-margin-top: 0;
-  }
-
-  .hero {
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 100px;
-    padding-bottom: 40px;
   }
 }
 
