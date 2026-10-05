@@ -267,157 +267,130 @@ export default function HomePage() {
       >
         <main>
           <section id="hero" className="hero section">
-          <div className="hero-grid" />
-          <div className="hero-content">
-            <motion.div
-              className="eyebrow"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{
-                opacity: introPhase === 'playing' ? 0 : 1,
-                y: introPhase === 'playing' ? 15 : 0,
-              }}
-              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="eyebrow-dot" />
-              مهندس نرم‌افزار · هوش مصنوعی
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 35 }}
-              animate={{
-                opacity: introPhase === 'playing' ? 0 : 1,
-                y: introPhase === 'playing' ? 35 : 0,
-              }}
-              transition={{ duration: 0.85, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
-            >
-              ایده‌ها را به
-              <span className="gradient-word"> تجربه‌های دیجیتال </span>
-              تبدیل می‌کنم.
-            </motion.h1>
-
-            <motion.p
-              className="hero-copy"
-              initial={{ opacity: 0, y: 25 }}
-              animate={{
-                opacity: introPhase === 'playing' ? 0 : 1,
-                y: introPhase === 'playing' ? 25 : 0,
-              }}
-              transition={{ duration: 0.75, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
-            >
-              توسعه‌دهنده نرم‌افزار با تمرکز بر ساخت محصولات فول‌استک و تجربه عملی
-              در هوش مصنوعی و یادگیری عمیق؛ از معماری و کدنویسی تا حل مسئله و
-              استقرار نهایی.
-            </motion.p>
-
-            <motion.div
-              className="hero-actions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{
-                opacity: introPhase === 'playing' ? 0 : 1,
-                y: introPhase === 'playing' ? 20 : 0,
-              }}
-              transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <button className="primary-button" onClick={() => scrollTo('projects')}>
-                مشاهده پروژه‌ها
-                <ArrowLeft size={17} />
-              </button>
-              <a
-                href="https://github.com/ParsaR082"
-                target="_blank"
-                rel="noreferrer"
-                className="secondary-button"
-              >
-                <Github size={17} />
-                GitHub
-              </a>
-            </motion.div>
-
-            <motion.div
-              className="hero-meta"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: introPhase === 'playing' ? 0 : 1 }}
-              transition={{ duration: 0.7, delay: 0.8 }}
-            >
-              <span><Check size={15} /> فارغ‌التحصیل مهندسی کامپیوتر</span>
-              <span><Check size={15} /> ۳ سال تجربه فریلنسری</span>
-              <span><Check size={15} /> انگلیسی متوسط رو به بالا</span>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="hero-art"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: introPhase === 'playing' ? 0 : 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="orbit orbit-a" />
-            <div className="orbit orbit-b" />
-            <div className="orbit orbit-c" />
-
-            <div className="hero-art-composite">
-              {introPhase !== 'playing' && (
-                <motion.div
-                  layoutId="parsa-portrait-card"
-                  className="hero-docked-portrait"
-                  transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <div className="hero-docked-portrait-img-wrap">
-                    <motion.div
-                      layoutId="parsa-portrait-img-inner"
-                      className="hero-docked-portrait-img-inner"
-                    >
-                      <img
-                        src="/parsa.jpg"
-                        alt="پارسا رحمانی - Parsa Rahmani"
-                        className="hero-docked-portrait-img"
-                      />
-                    </motion.div>
-                  </div>
-                  <div className="hero-docked-portrait-info">
-                    <div className="hero-docked-portrait-top">
-                      <span className="hero-docked-portrait-name">پارسا رحمانی</span>
-                      <span className="hero-status-pill">
-                        <span className="hero-status-dot" />
-                        آماده همکاری
-                      </span>
-                    </div>
-                    <span className="hero-docked-portrait-role">مهندس نرم‌افزار · هوش مصنوعی و فول‌استک</span>
-                  </div>
-                </motion.div>
-              )}
-
+            {/* 1. PERSISTENT PHOTO BACKDROP (Single Shared Layer: Opening Frame -> Hero Background) */}
+            <div className="hero-photo-stage">
               <motion.div
-                className="code-card"
-                animate={{ y: [0, -10, 0], rotate: [0, 0.6, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="hero-persistent-photo-wrapper"
+                animate={
+                  introPhase === 'playing'
+                    ? {
+                        width: 'min(980px, 90vw)',
+                        height: 'min(550px, 50.6vw)',
+                        borderRadius: '24px',
+                        boxShadow:
+                          '0 35px 120px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 40px rgba(183, 255, 74, 0.15)',
+                      }
+                    : {
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '0px',
+                        boxShadow: 'none',
+                      }
+                }
+                transition={{
+                  duration: 1.3,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
               >
-                <div className="code-top">
-                  <span /><span /><span />
-                  <small>portfolio.tsx</small>
-                </div>
-                <div className="code-body" dir="ltr">
-                  <span className="line muted">01</span><span className="pink">const</span> <span className="blue">developer</span> = {'{'}<br />
-                  <span className="line muted">02</span>&nbsp;&nbsp;name: <span className="green">&quot;Parsa&quot;</span>,<br />
-                  <span className="line muted">03</span>&nbsp;&nbsp;focus: [<span className="green">&quot;AI&quot;</span>, <span className="green">&quot;Full-Stack&quot;</span>],<br />
-                  <span className="line muted">04</span>&nbsp;&nbsp;build: <span className="yellow">true</span>,<br />
-                  <span className="line muted">05</span>&nbsp;&nbsp;curiosity: <span className="yellow">∞</span><br />
-                  <span className="line muted">06</span>{'}'}
-                </div>
-                <div className="code-glow" />
+                <img
+                  src="/hero-bg.jpg"
+                  alt="پارسا رحمانی - Parsa Rahmani"
+                  className="hero-persistent-photo"
+                />
+                <motion.div
+                  className="hero-photo-overlay"
+                  animate={{
+                    opacity: introPhase === 'playing' ? 0.22 : 0.68,
+                  }}
+                  transition={{ duration: 1.3 }}
+                />
               </motion.div>
             </div>
 
-            <div className="floating-chip chip-one"><Code2 size={15} /> فول‌استک</div>
-            <div className="floating-chip chip-two"><Sparkles size={15} /> هوش مصنوعی</div>
-            <div className="floating-chip chip-three"><Zap size={15} /> حل مسئله</div>
-          </motion.div>
+            <div className="container">
+              <div className="hero-content">
+                <motion.div
+                  className="eyebrow"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{
+                    opacity: introPhase === 'playing' ? 0 : 1,
+                    y: introPhase === 'playing' ? 15 : 0,
+                  }}
+                  transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <span className="eyebrow-dot" />
+                  مهندس نرم‌افزار · هوش مصنوعی
+                </motion.div>
 
-          <button className="scroll-cue" onClick={() => scrollTo('about')} aria-label="ادامه">
-            <span>ادامه</span>
-            <ChevronDown size={17} />
-          </button>
-        </section>
+                <motion.h1
+                  initial={{ opacity: 0, y: 35 }}
+                  animate={{
+                    opacity: introPhase === 'playing' ? 0 : 1,
+                    y: introPhase === 'playing' ? 35 : 0,
+                  }}
+                  transition={{ duration: 0.85, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  ایده‌ها را به
+                  <span className="gradient-word"> تجربه‌های دیجیتال </span>
+                  تبدیل می‌کنم.
+                </motion.h1>
+
+                <motion.p
+                  className="hero-copy"
+                  initial={{ opacity: 0, y: 25 }}
+                  animate={{
+                    opacity: introPhase === 'playing' ? 0 : 1,
+                    y: introPhase === 'playing' ? 25 : 0,
+                  }}
+                  transition={{ duration: 0.75, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  توسعه‌دهنده نرم‌افزار با تمرکز بر ساخت محصولات فول‌استک و تجربه عملی
+                  در هوش مصنوعی و یادگیری عمیق؛ از معماری و کدنویسی تا حل مسئله و
+                  استقرار نهایی.
+                </motion.p>
+
+                <motion.div
+                  className="hero-actions"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{
+                    opacity: introPhase === 'playing' ? 0 : 1,
+                    y: introPhase === 'playing' ? 20 : 0,
+                  }}
+                  transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <button className="primary-button" onClick={() => scrollTo('projects')}>
+                    مشاهده پروژه‌ها
+                    <ArrowLeft size={17} />
+                  </button>
+                  <a
+                    href="https://github.com/ParsaR082"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="secondary-button"
+                  >
+                    <Github size={17} />
+                    GitHub
+                  </a>
+                </motion.div>
+
+                <motion.div
+                  className="hero-meta"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: introPhase === 'playing' ? 0 : 1 }}
+                  transition={{ duration: 0.7, delay: 0.8 }}
+                >
+                  <span><Check size={15} /> فارغ‌التحصیل مهندسی کامپیوتر</span>
+                  <span><Check size={15} /> ۳ سال تجربه فریلنسری</span>
+                  <span><Check size={15} /> انگلیسی متوسط رو به بالا</span>
+                </motion.div>
+              </div>
+            </div>
+
+            <button className="scroll-cue" onClick={() => scrollTo('about')} aria-label="ادامه">
+              <span>ادامه</span>
+              <ChevronDown size={17} />
+            </button>
+          </section>
 
         <section id="about" className="section section-dark">
           <div className="container">

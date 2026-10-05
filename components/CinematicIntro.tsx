@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Sparkles, Terminal } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Sparkles } from 'lucide-react';
 
 export interface CinematicIntroProps {
   phase: 'playing' | 'transforming' | 'settled';
@@ -40,10 +40,10 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
     window.addEventListener('touchmove', preventScroll, { passive: false });
     window.addEventListener('keydown', preventKeyScroll, { passive: false });
 
-    // Target duration: ~2.6 seconds, then continuous morph into Hero
+    // Target duration: ~2.8 seconds, then continuous expansion into Hero
     const timer = setTimeout(() => {
       onStartTransformRef.current();
-    }, 2600);
+    }, 2800);
 
     return () => {
       clearTimeout(timer);
@@ -74,7 +74,7 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
       className="kinetic-intro-root"
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === 'transforming' ? 0 : 1 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
       style={{
         pointerEvents: phase === 'playing' ? 'auto' : 'none',
       }}
@@ -103,7 +103,7 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
 
       {/* 
         KINETIC TYPOGRAPHY GRID (Codrops TypeTransition)
-        Scale, rotate, and horizontal keyframe sweep across lines.
+        Interacting dynamically around and across the central photograph.
         When transforming, scales up and sweeps outward away from the center.
       */}
       <motion.div
@@ -115,7 +115,7 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
             : { scale: 1.7, rotate: -15, opacity: 1 }
         }
         transition={{
-          duration: phase === 'transforming' ? 1.2 : 2.8,
+          duration: phase === 'transforming' ? 1.25 : 2.8,
           ease: [0.16, 1, 0.3, 1],
         }}
       >
@@ -149,78 +149,23 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
         })}
       </motion.div>
 
-      {/* 
-        CODROPS COUNTER-SLIDING CURTAIN REVEAL CARD
-        Renders during 'playing'. When 'transforming' begins, this element unmounts here
-        and mounts in the Hero art with layoutId="parsa-portrait-card", causing Framer Motion
-        to seamlessly glide the portrait from center screen into the Hero layout without any cut!
-      */}
+      {/* Opening center metadata badge framed over the photo */}
       {phase === 'playing' && (
         <div className="kinetic-intro-content" onClick={(e) => e.stopPropagation()}>
           <motion.div
-            layoutId="parsa-portrait-card"
-            className="kinetic-curtain-card"
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="kinetic-intro-badge-pill"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Counter-slide curtain image wrap */}
-            <div className="kinetic-curtain-img-wrap">
-              <motion.div
-                layoutId="parsa-portrait-img-inner"
-                className="kinetic-curtain-img-inner"
-                initial={{ y: '-100%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-              >
-                <img
-                  src="/parsa.jpg"
-                  alt="پارسا رحمانی - Parsa Rahmani"
-                  className="kinetic-portrait-img"
-                />
-                <div className="kinetic-img-overlay" />
-              </motion.div>
-            </div>
-
-            {/* Typography metadata stagger */}
-            <div className="kinetic-card-meta">
-              <motion.div
-                className="kinetic-card-kicker"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <Sparkles size={14} className="kinetic-sparkle-icon" />
-                <span>PORTFOLIO 2026</span>
-              </motion.div>
-
-              <motion.h1
-                className="kinetic-card-title"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              >
-                پارسا رحمانی
-              </motion.h1>
-
-              <motion.p
-                className="kinetic-card-tagline"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              >
-                مهندس نرم‌افزار · هوش مصنوعی و فول‌استک
-              </motion.p>
-
-              <motion.div
-                className="kinetic-card-badges"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.65 }}
-              >
-                <span className="kinetic-badge"><Terminal size={12} /> TypeScript</span>
-                <span className="kinetic-badge">Python</span>
-                <span className="kinetic-badge">Next.js</span>
-              </motion.div>
-            </div>
+            <span className="kinetic-card-kicker">
+              <Sparkles size={13} className="kinetic-sparkle-icon" />
+              <span>PORTFOLIO 2026</span>
+            </span>
+            <span className="kinetic-pill-divider">·</span>
+            <strong className="kinetic-pill-name">پارسا رحمانی</strong>
+            <span className="kinetic-pill-divider">·</span>
+            <span className="kinetic-pill-title">مهندس نرم‌افزار و هوش مصنوعی</span>
           </motion.div>
         </div>
       )}
