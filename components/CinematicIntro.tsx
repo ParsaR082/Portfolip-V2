@@ -20,9 +20,13 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
       return;
     }
 
-    // Scroll lock during intro and transition
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
+    if (phase !== 'playing') {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      return;
+    }
+
+    // Scroll lock strictly during initial intro playing phase
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
@@ -47,13 +51,13 @@ export default function CinematicIntro({ phase, onStartTransform }: CinematicInt
 
     return () => {
       clearTimeout(timer);
-      document.body.style.overflow = prevBodyOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       window.removeEventListener('wheel', preventScroll);
       window.removeEventListener('touchmove', preventScroll);
       window.removeEventListener('keydown', preventKeyScroll);
     };
-  }, []);
+  }, [phase]);
 
   // Kinetic typography lines inspired directly by Codrops KineticTypePageTransition
   const kineticLines = [
