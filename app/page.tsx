@@ -12,7 +12,9 @@ import {
   ExternalLink,
   Github,
   GraduationCap,
+  Mail,
   Menu,
+  Phone,
   Sparkles,
   X,
   Zap,
@@ -947,22 +949,59 @@ function PortfolioContent() {
                 <FadeUp delay={0.16} distance={18} exitDistance={14} margin="-6% 0px -6% 0px">
                   <p>
                     برای همکاری روی پروژه‌های نرم‌افزاری، هوش مصنوعی یا ایده‌های جدید،
-                    می‌توانید از طریق GitHub با من در ارتباط باشید.
+                    می‌توانید از طریق ایمیل، تماس تلفنی یا گیت‌هاب با من در ارتباط باشید.
                   </p>
                 </FadeUp>
 
                 <FadeUp delay={0.24} distance={16} exitDistance={12} margin="-6% 0px -6% 0px">
-                  <motion.a
-                    className="primary-button contact-button"
-                    href="https://github.com/ParsaR082"
-                    target="_blank"
-                    rel="noreferrer"
-                    whileHover={{ scale: 1.04, y: -3 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    مشاهده GitHub
-                    <ExternalLink size={17} />
-                  </motion.a>
+                  <div className="contact-actions">
+                    <motion.a
+                      className="contact-card"
+                      href="mailto:prahmani082@gmail.com"
+                      whileHover={{ y: -4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className="contact-card-icon">
+                        <Mail size={20} />
+                      </div>
+                      <div className="contact-card-info">
+                        <span className="contact-card-label">ارسال ایمیل</span>
+                        <span className="contact-card-val" dir="ltr">prahmani082@gmail.com</span>
+                      </div>
+                    </motion.a>
+
+                    <motion.a
+                      className="contact-card"
+                      href="tel:+989145120736"
+                      whileHover={{ y: -4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className="contact-card-icon">
+                        <Phone size={20} />
+                      </div>
+                      <div className="contact-card-info">
+                        <span className="contact-card-label">تماس مستقیم</span>
+                        <span className="contact-card-val" dir="ltr">+98 914 512 0736</span>
+                      </div>
+                    </motion.a>
+
+                    <motion.a
+                      className="contact-card"
+                      href="https://github.com/ParsaR082"
+                      target="_blank"
+                      rel="noreferrer"
+                      whileHover={{ y: -4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className="contact-card-icon">
+                        <Github size={20} />
+                      </div>
+                      <div className="contact-card-info">
+                        <span className="contact-card-label">گیت‌هاب</span>
+                        <span className="contact-card-val" dir="ltr">github.com/ParsaR082</span>
+                      </div>
+                    </motion.a>
+                  </div>
                 </FadeUp>
               </div>
             </div>
