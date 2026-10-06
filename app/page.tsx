@@ -70,7 +70,19 @@ const skills = [
   { label: 'Vercel', group: 'ابزارها' },
 ];
 
-const projects = [
+interface ProjectItem {
+  number: string;
+  title: string;
+  category: string;
+  description: string;
+  stack: string;
+  featured?: boolean;
+  link?: string;
+  image?: string;
+  placeholder?: boolean;
+}
+
+const projects: ProjectItem[] = [
   {
     number: '۰۱',
     title: 'PINN-NAS',
