@@ -79,6 +79,8 @@ const projects = [
       'پروژه کارشناسی برای بهینه‌سازی معماری شبکه‌های Physics-Informed Neural Networks با جست‌وجوی خودکار معماری و ارزیابی معماری‌های مختلف بر اساس خطای مدل.',
     stack: 'Python · PyTorch · Optuna · PINNs',
     featured: true,
+    link: 'https://github.com/ParsaR082/PINN-NAS',
+    image: '/projects/pinn-nas.jpg',
   },
   {
     number: '۰۲',
@@ -87,25 +89,31 @@ const projects = [
     description:
       'سامانه مدیریت مدرسه با داشبورد فارسی و راست‌به‌چپ، مدیریت اطلاعات و ارتباط با پایگاه داده. لینک و تصاویر پروژه در نسخه نهایی اضافه می‌شوند.',
     stack: 'Next.js · TypeScript · Supabase · PostgreSQL',
-    placeholder: true,
+    link: 'https://school-management-beryl-one.vercel.app/',
+    image: '/projects/school-manager.png', // 👈 عکس پروژه دوم (مثلاً: '/projects/school.jpg')
   },
   {
     number: '۰۳',
-    title: 'Task Manager',
+    title: 'NeoPlan',
     category: 'وب · فول‌استک',
     description:
-      'سامانه مدیریت وظایف با احراز هویت Google، مدیریت داده‌ها و API و استقرار روی بستر ابری.',
-    stack: 'Next.js · TypeScript · Prisma · MongoDB',
+      'پلتفرم هوشمند مدیریت و برنامه‌ریزی اهداف، یکپارچه‌سازی پروژه‌ها و پیگیری تسک‌ها با پایگاه‌داده بلادرنگ و استقرار ابری.',
+    stack: 'Next.js · TypeScript · Supabase · PostgreSQL · Tailwind CSS',
+    link: 'https://neoplan-kappa.vercel.app/',
+    image: '/projects/neoplan.png',
   },
   {
     number: '۰۴',
-    title: 'NeoVoid',
-    category: 'نمونه‌کار شخصی',
+    title: 'Architecture Studio',
+    category: 'وب · فرانت‌اند / موشن',
     description:
-      'وب‌سایت شخصی و تیمی با طراحی مینیمال، بخش وبلاگ و تمرکز بر تجربه کاربری و ارائه پروژه‌ها.',
-    stack: 'Next.js · TypeScript · Tailwind CSS',
+      'وب‌سایت تعاملی و مدرن استودیوی معماری با جلوه‌ها و ترنزیشن‌های حرکتی سینمایی (Cinematic Reveals)، طراحی مینیمال و عملکرد بهینه.',
+    stack: 'Next.js 15 · TypeScript · Tailwind CSS · Motion / GSAP',
+    link: 'https://studio-ten-teal-18.vercel.app/',
+    image: '/projects/studio.png',
   },
 ];
+
 
 const experience = [
   {
@@ -384,18 +392,18 @@ function PortfolioContent() {
                 animate={
                   introPhase === 'playing'
                     ? {
-                        width: isMobile ? 'min(90vw, 390px)' : 'min(940px, 90vw)',
-                        height: isMobile ? 'clamp(340px, 56vh, 460px)' : 'min(528px, 50.6vw)',
-                        borderRadius: isMobile ? '20px' : '26px',
-                        boxShadow:
-                          '0 35px 120px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 55px rgba(183, 255, 74, 0.18)',
-                      }
+                      width: isMobile ? 'min(90vw, 390px)' : 'min(940px, 90vw)',
+                      height: isMobile ? 'clamp(340px, 56vh, 460px)' : 'min(528px, 50.6vw)',
+                      borderRadius: isMobile ? '20px' : '26px',
+                      boxShadow:
+                        '0 35px 120px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 55px rgba(183, 255, 74, 0.18)',
+                    }
                     : {
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '0px',
-                        boxShadow: 'none',
-                      }
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '0px',
+                      boxShadow: 'none',
+                    }
                 }
                 transition={{
                   duration: 1.35,
@@ -812,42 +820,65 @@ function PortfolioContent() {
               </FadeUp>
 
               <div className="project-list">
-                {projects.map((project) => (
-                  <FadeUp
-                    key={project.title}
-                    delay={0.06}
-                    distance={26}
-                    exitDistance={20}
-                    margin="-6% 0px -6% 0px"
-                    className="project-card-wrap"
-                  >
-                    <motion.div
-                      className="project-card"
-                      whileHover={{ y: -4 }}
-                      transition={{ duration: 0.28, ease: ease.smooth }}
+                {projects.map((project) => {
+                  const hasLink = Boolean(project.link);
+                  const CardWrapper = hasLink ? motion.a : motion.div;
+
+                  return (
+                    <FadeUp
+                      key={project.title}
+                      delay={0.06}
+                      distance={26}
+                      exitDistance={20}
+                      margin="-6% 0px -6% 0px"
+                      className="project-card-wrap"
                     >
-                      <div className="project-number">{project.number}</div>
-                      <div className="project-info">
-                        <div className="project-category">{project.category}</div>
-                        <h3>{project.title}</h3>
-                        <p>{project.description}</p>
-                        <div className="project-stack">{project.stack}</div>
-                      </div>
-                      <div className="project-arrow">
-                        {project.placeholder ? (
-                          <span className="coming-soon">در حال تکمیل</span>
-                        ) : (
-                          <motion.div
-                            whileHover={{ x: -4, y: -4 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <ArrowUpLeft size={22} />
-                          </motion.div>
+                      <CardWrapper
+                        className="project-card"
+                        {...(hasLink
+                          ? {
+                            href: project.link,
+                            target: '_blank',
+                            rel: 'noreferrer',
+                          }
+                          : {})}
+                        whileHover={{ y: -4 }}
+                        transition={{ duration: 0.28, ease: ease.smooth }}
+                      >
+                        <div className="project-number">{project.number}</div>
+                        <div className="project-info">
+                          <div className="project-category">{project.category}</div>
+                          <h3>{project.title}</h3>
+                          <p>{project.description}</p>
+                          <div className="project-stack">{project.stack}</div>
+                        </div>
+                        {project.image && (
+                          <div className="project-thumb">
+                            <Image
+                              src={project.image}
+                              alt={project.title}
+                              width={240}
+                              height={140}
+                              className="project-thumb-img"
+                            />
+                          </div>
                         )}
-                      </div>
-                    </motion.div>
-                  </FadeUp>
-                ))}
+                        <div className="project-arrow">
+                          {project.placeholder ? (
+                            <span className="coming-soon">در حال تکمیل</span>
+                          ) : (
+                            <motion.div
+                              whileHover={{ x: -4, y: -4 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ArrowUpLeft size={22} />
+                            </motion.div>
+                          )}
+                        </div>
+                      </CardWrapper>
+                    </FadeUp>
+                  );
+                })}
               </div>
             </div>
           </section>
